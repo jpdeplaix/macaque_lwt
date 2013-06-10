@@ -1,0 +1,18 @@
+OASISFormat: 0.3
+Name:        macaque_lwt
+Version:     0.1
+Synopsis:    Utils for MaCaQue with Lwt
+Authors:     Jacques-Pascal Deplaix
+License:     MIT
+Plugins:     DevFiles (0.3), META (0.3)
+
+Library macaque_lwt
+  Path: src
+  BuildTools: ocamlbuild
+  Modules:
+    Macaque_lwt
+  BuildDepends:
+    macaque (>= 0.6),
+    lwt
+  ByteOpt: -w A
+  NativeOpt: -w A

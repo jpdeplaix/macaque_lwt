@@ -1,0 +1,12 @@
+# OASIS_START
+# DO NOT EDIT (digest: 8c70c57fccf04fffbdd9d5ff4a516590)
+version = "0.1"
+description = "Utils for MaCaQue with Lwt"
+requires = "macaque lwt"
+archive(byte) = "macaque_lwt.cma"
+archive(byte, plugin) = "macaque_lwt.cma"
+archive(native) = "macaque_lwt.cmxa"
+archive(native, plugin) = "macaque_lwt.cmxs"
+exists_if = "macaque_lwt.cma"
+# OASIS_STOP
+
