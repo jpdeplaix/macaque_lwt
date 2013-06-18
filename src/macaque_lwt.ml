@@ -57,6 +57,7 @@ module Make (Config : CONFIG) = struct
   let view_one ?log x = exec Lwt_Query.view_one ?log x
   let query ?log x = exec Lwt_Query.query ?log x
   let value ?log x = exec Lwt_Query.value ?log x
+  let value_opt ?log x = exec Lwt_Query.value_opt ?log x
 
   let alter =
     let name = "query" in
