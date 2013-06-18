@@ -41,13 +41,13 @@ module Make : functor (Config : CONFIG) -> sig
 
   type ('a, 'b) t = ('a, 'b) macaque_type Sql.t
 
-  val view : ?log:out_channel -> ('a, 'b) Sql.view -> 'a list Lwt.t
+  val view : ?log:out_channel -> ('a, _) Sql.view -> 'a list Lwt.t
 
-  val view_one : ?log:out_channel -> ('a, 'b) Sql.view -> 'a Lwt.t
+  val view_one : ?log:out_channel -> ('a, _) Sql.view -> 'a Lwt.t
 
-  val view_opt : ?log:out_channel -> ('a, 'b) Sql.view -> 'a option Lwt.t
+  val view_opt : ?log:out_channel -> ('a, _) Sql.view -> 'a option Lwt.t
 
-  val query : ?log:out_channel -> unit Sql.query -> unit Lwt.t
+  val query : ?log:out_channel -> 'a Sql.query -> 'a Lwt.t
 
   val value :
     ?log:out_channel ->
