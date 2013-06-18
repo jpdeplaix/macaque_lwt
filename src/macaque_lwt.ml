@@ -50,22 +50,22 @@ module Make (Config : CONFIG) = struct
 
   let pool = Lwt_pool.create Config.pool_number ~validate Config.connect
 
-  let exec f x = Lwt_pool.use pool (fun db -> f db x)
+  let exec f ?log x = Lwt_pool.use pool (fun db -> f db ?log x)
 
-  let view x = exec (fun db x -> Lwt_Query.view db x) x
-  let view_opt x = exec (fun db x -> Lwt_Query.view_opt db x) x
-  let view_one x = exec (fun db x -> Lwt_Query.view_one db x) x
-  let query x = exec (fun db x -> Lwt_Query.query db x) x
-  let value x = exec (fun db x -> Lwt_Query.value db x) x
+  let view ?log x = exec Lwt_Query.view ?log x
+  let view_opt ?log x = exec Lwt_Query.view_opt ?log x
+  let view_one ?log x = exec Lwt_Query.view_one ?log x
+  let query ?log x = exec Lwt_Query.query ?log x
+  let value ?log x = exec Lwt_Query.value ?log x
 
   let alter =
     let name = "query" in
-    let low_level_exec db query =
+    let low_level_exec db ?log:_ query =
       Lwt_PGOCaml.prepare db ~query ~name () >>= fun () ->
       Lwt_PGOCaml.execute db ~name ~params:[] () >>= fun _ ->
       Lwt_PGOCaml.close_statement db ~name ()
     in
-    exec low_level_exec
+    exec low_level_exec ?log:None
 end
 
 module Utils = struct
