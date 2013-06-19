@@ -59,7 +59,14 @@ module Make : functor (Config : CONFIG) -> sig
     < nul : Sql.nullable; t : 'a #Sql.type_info; .. > Sql.t ->
     'a option Lwt.t
 
-  val alter : string -> unit Lwt.t
+  module Low_level : sig
+    val inject :
+      ?name:string ->
+      ?log:out_channel ->
+      string ->
+      Lwt_PGOCaml.row list Lwt.t
+    val alter : ?name:string -> ?log:out_channel -> string -> unit Lwt.t
+  end
 end
 
 module Utils : sig

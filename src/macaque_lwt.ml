@@ -59,14 +59,23 @@ module Make (Config : CONFIG) = struct
   let value ?log x = exec Lwt_Query.value ?log x
   let value_opt ?log x = exec Lwt_Query.value_opt ?log x
 
-  let alter =
-    let name = "query" in
-    let low_level_exec db ?log:_ query =
-      Lwt_PGOCaml.prepare db ~query ~name () >>= fun () ->
-      Lwt_PGOCaml.execute db ~name ~params:[] () >>= fun _ ->
-      Lwt_PGOCaml.close_statement db ~name ()
-    in
-    exec low_level_exec ?log:None
+  module Low_level = struct
+    let inject ?(name="query") =
+      let aux db ?log query =
+        (match log with
+          | None -> ()
+          | Some out -> Printf.fprintf out "%s\n%!" query
+        );
+        Lwt_PGOCaml.prepare db ~query ~name () >>= fun () ->
+        Lwt_PGOCaml.execute db ~name ~params:[] () >>= fun ret ->
+        Lwt_PGOCaml.close_statement db ~name () >>= fun () ->
+        Lwt.return ret
+      in
+      exec aux
+
+    let alter ?name ?log query =
+      inject ?name ?log query >>= fun _ -> Lwt.return ()
+  end
 end
 
 module Utils = struct
