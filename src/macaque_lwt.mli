@@ -47,6 +47,8 @@ module Make : functor (Config : CONFIG) -> sig
   type ('a, 'b) t = ('a, 'b) macaque_type Sql.t
   type db_t = Lwt_PGOCaml.pa_pg_data Lwt_PGOCaml.t
 
+  val pool : db_t Lwt_pool.t
+
   val exec :
     (db_t -> ?log:out_channel -> 'b -> 'c Lwt.t) ->
     ?log:out_channel ->
