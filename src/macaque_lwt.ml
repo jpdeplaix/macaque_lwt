@@ -41,6 +41,7 @@ module Make (Config : CONFIG) = struct
   end
 
   type ('a, 'b) t = ('a, 'b) macaque_type Sql.t
+  type db_t = Lwt_PGOCaml.pa_pg_data Lwt_PGOCaml.t
 
   let validate db =
     Lwt.try_bind

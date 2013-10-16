@@ -40,6 +40,13 @@ module Make : functor (Config : CONFIG) -> sig
   end
 
   type ('a, 'b) t = ('a, 'b) macaque_type Sql.t
+  type db_t = Lwt_PGOCaml.pa_pg_data Lwt_PGOCaml.t
+
+  val exec :
+    (db_t -> ?log:out_channel -> 'b -> 'c Lwt.t) ->
+    ?log:out_channel ->
+    'b ->
+    'c Lwt.t
 
   val view : ?log:out_channel -> ('a, _) Sql.view -> 'a list Lwt.t
 
