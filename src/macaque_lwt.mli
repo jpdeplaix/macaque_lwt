@@ -24,8 +24,13 @@ module Lwt_thread : sig
   include module type of Lwt_chan
 end
 
-module Lwt_PGOCaml : PGOCaml_generic.PGOCAML_GENERIC with type 'a monad = 'a Lwt.t
-module Lwt_Query : Query.QUERY with type 'a Db.monad = 'a Lwt.t
+module Lwt_PGOCaml :
+  PGOCaml_generic.PGOCAML_GENERIC
+  with type 'a monad = 'a Lwt.t
+module Lwt_Query :
+  Query.QUERY
+  with type 'a Db.t = 'a Lwt_PGOCaml.t
+   and type 'a Db.monad = 'a Lwt.t
 
 module type CONFIG = sig
   val connect : unit -> 'a Lwt_PGOCaml.t Lwt.t
