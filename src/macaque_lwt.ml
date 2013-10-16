@@ -60,6 +60,22 @@ module Make (Config : CONFIG) = struct
   let value ?log x = exec Lwt_Query.value ?log x
   let value_opt ?log x = exec Lwt_Query.value_opt ?log x
 
+  let transaction_block ?log f =
+    let aux db f =
+      Lwt_PGOCaml.begin_work db >>= fun _ ->
+      Lwt.catch
+        (fun () ->
+           f () >>= fun r ->
+           Lwt_PGOCaml.commit db >>= fun () ->
+           Lwt.return r
+        )
+        (fun e ->
+           Lwt_PGOCaml.rollback db >>= fun () ->
+           Lwt.fail e
+        )
+    in
+    exec (fun db ?log () -> aux db (fun () -> f ?log db)) ?log ()
+
   module Low_level = struct
     let inject ?(name="query") =
       let aux db ?log query =

@@ -66,6 +66,11 @@ module Make : functor (Config : CONFIG) -> sig
     < nul : Sql.nullable; t : 'a #Sql.type_info; .. > Sql.t ->
     'a option Lwt.t
 
+  val transaction_block :
+    ?log:out_channel ->
+    (?log:out_channel -> db_t -> 'c Lwt.t) ->
+    'c Lwt.t
+
   module Low_level : sig
     val inject :
       ?name:string ->
